@@ -1,0 +1,277 @@
+version: "2.0"
+
+intents:
+  - request_auth:
+      use_entities: []
+
+  - chitchat:
+      use_entities: []
+  
+  - request_ac:
+      use_entities: []
+  
+
+  - to_voucher_webpage
+  - irgl_download
+  - irgl_video
+  - irgl_chart
+
+  - inform
+  - affirm
+  - deny
+  - stop
+  - thankyou
+  - greet
+  - bot_challenge
+
+
+slots:
+
+  auth_name:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+  
+  auth_numpeople:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+  
+  auth_fnumber:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+  auth_fdate:
+    type: text
+    influence_conversation: false
+    auto_fill: false 
+  auth_applyid:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+  requested_slot:
+    type: text
+    influence_conversation: false
+
+
+  first_name:
+    type: text
+    influence_conversation: false
+  last_name:
+    type: text
+    influence_conversation: false
+  
+  ### actaul cost form
+  ac_mail:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+  ac_country:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+  
+  ac_receipt_method:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+
+
+responses:
+
+  utter_greet:
+    - text: "補償申請サイトへようこそ！\n今回のお手続き内容を教えて下さい。"
+      custom:
+        payload: quickReplies
+        data:
+        - title: 補償申請
+          payload: apply
+        - title:  補償再申請
+          payload: un_define
+        - title: 申請状況確認
+          payload: "irgl chart"
+
+        - title: ビデオ資料
+          payload: "show video"
+
+        - title: 資料ダウンロード
+          payload: irgl_download
+
+
+  utter_ask_auth_name:
+    - text: "名前を入力してくだい(全角カタカタ)"
+  utter_ask_auth_numpeople:
+    - text: "何人ですか?"
+  utter_ask_auth_fnumber:
+    - text: "便名を入力してください"
+  utter_ask_auth_fdate:
+    - text: "搭乗日付を入力してください。例: 2022/3/4"
+  utter_ask_auth_applyid:
+    - text: "申請IDを入力してください"
+
+
+  # utter_wrong_auth_name:
+  #   - text: "名前を再入力してくだい"
+  utter_wrong_auth_numpeople:
+    - text: "数字を入力した下さい"
+  utter_wrong_auth_fnumber:
+    - text: "便名を再入力してください"
+  utter_wrong_auth_fdate:
+    - text: "搭乗日付を再入力してください"
+  utter_wrong_auth_applyid:
+    - text: "申請IDを再入力してください"
+
+  utter_auth_submit:
+  - text: "認証完了しました"
+  utter_auth_slots_values:
+    - text: "認証フォームのパラメータ：\n
+             - 搭乗者: {auth_name}\n
+             - 人数: {auth_numpeople}\n
+             - 便名: {auth_fnumber}\n
+             - 搭乗日付: {auth_fdate}\n
+             - 申請ID: {auth_applyid}"
+      buttons:
+        - title: "次の補償処理手続きへ案内します"
+          payload: "実費処理"
+  
+
+  utter_nameform_submit:
+  - text: 名前のフォームの入力が完了しました
+  utter_nameform_slots_values:
+  - text: あなたの名前：  {first_name} {last_name}!
+  
+  utter_ask_first_name:
+    - text: "名前(性)を入力してください"
+  utter_ask_last_name:
+    - text: "名前(名)を入力してください"
+  
+
+### actual cost form
+
+  utter_ask_ac_mail:
+    - text: "メールアドレスを入力ください"
+
+  # utter_wrong_ac_mail:
+  #   - text: "メールアドレスが正しくないです、再入力して下さい"
+  # utter_wrong_ac-country:
+  #   - text: "再度居住国を選択してください"
+        
+
+  utter_acform_submit:
+    - text: "実費Form入力が完了しました"
+  utter_acform_slots_values:
+    - text: "実費Formの値: \n
+             - メール: {ac_mail}\n
+             - 居住国: {ac_country}\n
+             - 受取手段: {ac_receipt_method}"
+      buttons:
+        - title: "確認"
+          payload: "voucher webpage"
+        - title: "修正"
+          payload: "ac_edit"
+  
+  utter_to_voucher_webpage:
+    - text: "WEB画面に遷移するご案内\nこれより証票アップロード画面に移りますので引き続き必要項目の入力をお願いします"
+      custom: 
+        payload: pdf_attachment
+        title: "次へ"
+        url: "https://www.jfc.go.jp/n/service/pdf/tukibetu_syuusikeikakusyo_rei191120.pdf"
+
+  utter_irgl_video:
+    - text: "Check this video"
+      attachment: { "type":"video", "payload": { "src": "https://youtube.com/embed/9C1Km6xfdMA" } }
+
+  utter_demo_chart:
+    - text: "申請処理状況詳細"
+      custom:
+        payload: chart
+        data:
+            title: Leaves
+            labels:
+            - Sick Leave
+            - Casual Leave
+            - Earned Leave
+            - Flexi Leave
+            backgroundColor:
+            - "#36a2eb"
+            - "#ffcd56"
+            - "#ff6384"
+            - "#009688"
+            - "#c45850"
+            chartsData:
+            - 5
+            - 10
+            - 22
+            - 3
+            chartType: pie
+            displayLegend: "true"
+
+
+  utter_irgl_download:
+    - text: "補償申請説明資料V1.0"
+      custom: 
+        payload: pdf_attachment
+        title: "補償申請説明資料V1.0"
+        url: "https://manual.buffalo.jp/buf-doc/35021178-34.pdf"
+
+
+  utter_noworries:
+    - text: "いつでも気軽に聞いてください。"
+  utter_chitchat:
+    - text: "chitchat"
+  
+  utter_ask_continue:
+    - text: "Do you want to continue?"
+  
+
+  utter_default:
+    - text: "申し訳ありませんが、わかりませんでした。他に入力してみてください"
+
+  utter_iamabot:
+    - text: "I am a bot, powered by Rasa."
+  utter_restart:
+    - text: "restarted"
+
+actions:
+- validate_auth_form
+# - validate_name_form
+- validate_ac_form
+- action_ask_ac_receipt_method
+- action_ask_ac_country
+- utter_irgl_download
+- utter_to_voucher_webpage
+- utter_irgl_video
+- utter_demo_chart
+
+forms:
+  auth_form:
+      auth_name:
+      - type: from_text
+
+      auth_numpeople:
+      - type: from_text
+
+      auth_fnumber:
+      - type: from_text
+
+      auth_fdate:
+      - type: from_text
+
+      auth_applyid:
+      - type: from_text
+
+  ac_form:
+    ac_mail:
+    - type: from_text
+    ac_country:
+    - type: from_text
+    ac_receipt_method:
+    - type: from_text
+
+
+
+session_config:
+  session_expiration_time: 60  # value in minutes
+  carry_over_slots_to_new_session: true

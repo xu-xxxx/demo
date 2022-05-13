@@ -1,0 +1,67 @@
+version: "2.0"
+stories:
+
+- story: stop form + continue
+  steps:
+    - intent: request_auth
+    - action: auth_form
+    - active_loop: auth_form
+    - intent: stop
+    - action: utter_ask_continue
+    - intent: affirm
+    - action: auth_form
+    - active_loop: null
+    - action: utter_auth_submit
+    - action: utter_auth_slots_values
+
+- story: stop form + stop
+  steps:
+    - intent: request_auth
+    - action: auth_form
+    - active_loop: auth_form
+    - intent: stop
+    - action: utter_ask_continue
+    - intent: deny
+    - action: action_deactivate_loop
+    - active_loop: null
+
+# - story: interactive_story_name
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: request_names
+#   - action: name_form
+#   - active_loop: name_form
+#   - slot_was_set:
+#     - requested_slot: first_name
+#   - slot_was_set:
+#     - first_name: vincent
+#   - slot_was_set:
+#     - requested_slot: last_name
+#   - slot_was_set:
+#     - last_name: vincent-mcvincent
+#   - slot_was_set:
+#     - requested_slot: null
+#   - active_loop: null
+#   - action: utter_nameform_submit
+#   - action: utter_nameform_slots_values
+
+
+- story: interactive_story_actualcost
+  steps:
+  - intent: request_ac
+  - action: ac_form
+  - active_loop: ac_form
+  - slot_was_set:
+    - requested_slot: ac_mail
+  - slot_was_set:
+    - requested_slot: ac_country
+  - slot_was_set:
+    - requested_slot: ac_receipt_method
+    
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  
+  - action: utter_acform_submit
+  - action: utter_acform_slots_values

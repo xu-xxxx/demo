@@ -1,0 +1,90 @@
+version: "2.0"
+rules:
+  - rule: Greet user
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: Thank you
+    steps:
+      - intent: thankyou
+      - action: utter_noworries
+
+  - rule: Bot challenge
+    steps:
+      - intent: bot_challenge
+      - action: utter_iamabot
+
+  - rule: Chitchat
+    steps:
+      - intent: chitchat
+      - action: utter_chitchat
+
+### auth
+
+  - rule: activate auth form
+    steps:
+      - intent: request_auth
+      - action: auth_form
+      - active_loop: auth_form
+
+  - rule: submit form
+    condition:
+    - active_loop: auth_form
+    steps:
+      - action: auth_form
+      - active_loop: null
+      - action: utter_auth_submit
+      - action: utter_auth_slots_values
+
+
+
+### actual cont
+
+  - rule: Activate ac form
+    steps:
+    - intent: request_ac
+    - action: ac_form
+    - active_loop: ac_form
+
+  - rule: Submit ac form
+    condition:
+    - active_loop: ac_form
+    steps:
+    - action: ac_form
+    - active_loop: null
+    - slot_was_set:
+      - requested_slot: null
+    - action: utter_acform_submit
+    - action: utter_acform_slots_values
+
+
+  - rule: to ac confirm
+    steps:
+      - intent: to_voucher_webpage
+      - action: utter_to_voucher_webpage
+
+
+  - rule: irgl download
+    steps:
+      - intent: irgl_download
+      - action: utter_irgl_download
+
+  - rule: irgl video
+    steps:
+      - intent: irgl_video
+      - action: utter_irgl_video
+
+  - rule: irgl chart
+    steps:
+      - intent: irgl_chart
+      - action: utter_demo_chart
+
+
+
+### test custom action
+
+
+
+
+
